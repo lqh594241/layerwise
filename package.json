@@ -1,0 +1,13 @@
+{
+  "name": "layerwise",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A private, browser-based 3D printing cost and quote calculator.",
+  "scripts": {
+    "dev": "node server.mjs",
+    "start": "node server.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/*.test.mjs"
+  }
+}
