@@ -1,6 +1,6 @@
 # Layerwise · 3D 打印成本与报价工具
 
-面向英文用户的独立工具站。原生 HTML/CSS/JavaScript，无前端运行依赖、付费 API、账户系统或服务器端数据存储。默认没有广告、统计脚本和外部字体请求。
+面向英文用户的独立工具站。原生 HTML/CSS/JavaScript，无前端运行依赖、付费 API、账户系统或服务器端数据存储。已接入用户提供的 HilltopAds 横幅和点击弹窗代码；Ahrefs 保持空白，未使用外部字体。
 
 ## 本地预览
 
@@ -44,16 +44,18 @@ npm run build
 
 还可以把 `dist` 交给其他支持商业用途的静态托管。资源和站内链接使用相对路径，支持本地文件打开或子目录预览。自动生成 canonical 和 sitemap 的构建配置按最终域名根目录上线。未替用户创建仓库或执行公网发布。
 
-## 手动添加 Ahrefs / Monetag
+## HilltopAds 和 Ahrefs 接入位置
 
 编辑源文件 `index.html`，然后重新构建部署：
 
 - **Ahrefs：** 在 `<head>` 中找到 `AHREFS_ANALYTICS_START` / `AHREFS_ANALYTICS_END`，将你后台的统计代码粘贴到这对注释之间。
-- **Monetag 全站代码：** 在 `<head>` 中找到 `MONETAG_SCRIPT_START` / `MONETAG_SCRIPT_END`。按后台广告格式说明粘贴代码，不要把私密账号凭据写入源码。
-- **页面广告位置：** 计算器下方有 `#ad-slot-after-calculator`，默认 `hidden`，不会占空间。如果你的广告格式支持固定容器，可去掉 `hidden` 并放入该格式要求的内容。弹出式或 IPP 广告的渲染位置由广告服务控制，不会因为预留了 div 自动出现在这里。
+- **HilltopAds 横幅（已添加）：** 搜索 `HILLTOPADS_BANNER_START`，位于首页正文之前的 `#ad-dock` 中，外层宽度为页面的 100%，随页面正常滚动。素材保持原比例居中，小屏按可用宽度缩小；固定尺寸广告本身不会被强行拉伸。右侧仅有 × 关闭按钮，本次页面访问关闭后不再出现，刷新页面恢复。无填充时不占高度，不遮挡导航和计算器。不要重复添加。
+- **HilltopAds 弹窗（已添加）：** 搜索 `HILLTOPADS_POPUP_START`。用户新提供的 `bold-consequence.com` 地址返回 HTML 广告跳转页，已按用户要求改为点击 Build your quote / Copy breakdown / Share estimate 时调用 `window.open`；原按钮功能继续执行，不拦截输入、关闭、重置和材料切换。同次页面访问仅尝试一次；浏览器决定以新标签页还是新窗口打开，也可能阻止弹出。该 URL 不作为 `<script src>` 加载，旧 `expensive-pollution.com` 脚本已移除。
+- **视频广告（已移除）：** 首页不再包含视频脚本或五秒定时加载逻辑。
+- **Monetag（未启用）：** `<head>` 中原有 `MONETAG_SCRIPT_START` / `MONETAG_SCRIPT_END` 仍为空；不是 HilltopAds 的接入位置。不要把同一段代码重复放入多处。
 - 添加第三方脚本后，必须同步更新 `privacy.html` 中的隐私说明，并按实际地区和所用广告/统计服务配置必要的同意机制。尤其分享链接里含有成本数据，需确认第三方脚本是否读取完整页面 URL；有需要可停用分享功能。
 
-预留位置目前为空，没有伪造广告展示、统计账号或事件 ID。
+已还原用户粘贴时的 Markdown/HTML 转义，并显式使用 HTTPS，保证本地文件模式不会把 `//` 误识别为文件路径。广告位路径保持用户提供的值。实际广告展示需在平台认可的站点测试，本地预览、广告拦截或平台限制可能导致不展示。浏览器自动化验证会拦截广告请求并返回空脚本，不产生测试广告流量，也不据此宣称实际填充成功。`ad-example.html` 仍是无真实广告的独立位置示意，不属于生产构建。
 
 ## 文件
 
@@ -68,3 +70,24 @@ npm run build
 | `server.mjs` | 仅供本地预览的静态服务 |
 
 下一步可根据真实搜索词扩展独立的树脂打印、机器折旧和耗材长度换算页面。首版没有批量生成重复 SEO 页面。
+
+## 排查广告没有出现
+
+打开生产网站，按 F12，在 Console 中执行：
+
+```js
+['banner', 'popup'].map(type => ({
+  type,
+  status: document.getElementById(`hilltopads-${type}-loader`)?.dataset.adStatus || 'not-in-this-version'
+}));
+```
+
+- `not-in-this-version`：当前页面不是这版代码，检查 GitHub 提交和 Cloudflare 部署、强制刷新。
+- 弹窗为 `ready`，点击指定功能按钮后变为 `attempted`；`attempted` 不保证浏览器允许了新窗口。
+- `error`：脚本网络加载失败；在 Network 中查看失败请求，例如扩展拦截、域名或连接问题。
+- `loaded`：脚本加载事件已触发，不代表平台已有广告填充或已出现广告或弹窗；继续看平台站点/广告位状态、频控、地区与浏览器设置。不要用不断自动重试或 window.open 强行绕过平台和浏览器。
+
+测试在本地拦截广告请求，以空脚本或布局素材验证，不生成真实广告展示。广告只接入首页；条款与隐私页面不加载广告。不要把本地 file:// 预览结果当作生产域名的展示结果。
+
+
+当前版本标记：`2026-11-05-full-width-top-banner-no-video`。可在生产首页源代码中检查 `layerwise-release`，确认已部署最新版。

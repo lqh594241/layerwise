@@ -355,6 +355,40 @@ $('copy-link').addEventListener('click', async () => {
   else { $('share-url').focus(); $('share-url').select(); toast('Select the link and copy it manually.'); }
 });
 
+// The full-width banner sits in normal document flow and scrolls with the page.
+const adDock = $('ad-dock');
+if (adDock) {
+  const creative = $('ad-slot-after-calculator');
+  const viewport = $('ad-dock-viewport');
+  const toggle = $('ad-dock-toggle');
+  let dismissed = false;
+  let frame = 0;
+  function updateAdDock() {
+    frame = 0;
+    if (dismissed) return;
+    const width = creative.scrollWidth;
+    const height = creative.offsetHeight;
+    const filled = width > 0 && height > 0;
+    const scale = filled ? Math.min(1, viewport.clientWidth / width, 180 / height) : 1;
+    creative.style.setProperty('--ad-scale', String(scale));
+    viewport.style.height = `${Math.ceil(height * scale)}px`;
+    adDock.dataset.empty = String(!filled);
+    adDock.inert = !filled;
+  }
+  function scheduleAdDock() {
+    if (!dismissed && !frame) frame = requestAnimationFrame(updateAdDock);
+  }
+  toggle.addEventListener('click', () => {
+    dismissed = true;
+    adDock.classList.add('is-dismissed');
+    adDock.inert = true;
+  });
+  if (typeof ResizeObserver !== 'undefined') new ResizeObserver(scheduleAdDock).observe(creative);
+  new MutationObserver(scheduleAdDock).observe(creative, { childList: true, subtree: true, attributes: true, attributeFilter: ['width', 'height'] });
+  window.addEventListener('resize', scheduleAdDock);
+  updateAdDock();
+}
+
 $('year').textContent = new Date().getFullYear();
 fillInputs();
 render();

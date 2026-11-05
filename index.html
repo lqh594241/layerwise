@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f7f8f4">
+  <meta name="layerwise-release" content="2026-11-05-full-width-top-banner-no-video">
   <title>3D Printing Cost Calculator & Quote Builder — Layerwise</title>
   <meta name="description" content="Calculate the real cost of FDM and resin 3D prints. Include material, electricity, machine time, labor and failed prints. Set a profit margin and download a quote. Free, no sign-up.">
   <meta property="og:title" content="Know your print cost. Price with confidence. — Layerwise">
   <meta property="og:description" content="A free FDM and resin cost calculator that accounts for the little things. Build a clear, profitable quote in your browser.">
   <meta property="og:type" content="website">
-  <meta name="referrer" content="no-referrer-when-downgrade" />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Layerwise 3D Printing Cost Calculator","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript and a modern browser","description":"Calculate FDM and resin printing costs, account for failed prints, and build a margin-based quote.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["FDM and resin cost estimates","Material, power, machine and labor costs","Failure allowance","Profit margin and markup pricing","Downloadable quotes"]}</script>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./styles.css">
@@ -21,6 +21,32 @@
   <script defer src="./app.js"></script>
 </head>
 <body>
+  <aside id="ad-dock" class="ad-dock" data-empty="true" aria-label="Advertisement" inert>
+    <div class="ad-dock-header">
+      <button type="button" id="ad-dock-toggle" aria-label="Close advertisement" aria-controls="ad-dock-viewport"><span aria-hidden="true">×</span></button>
+    </div>
+    <div id="ad-dock-viewport" class="ad-viewport">
+      <!-- HILLTOPADS_BANNER_START: User-provided banner tag. Do not duplicate. -->
+      <div id="ad-slot-after-calculator" class="ad-slot ad-creative" aria-label="Advertisement">
+        <script id="hilltopads-banner-loader" data-ad-status="loading">
+        (function(irom){
+          var d = document,
+              s = d.createElement('script'),
+              l = d.currentScript || d.scripts[d.scripts.length - 1];
+          s.settings = irom || {};
+          s.src = "https://shameful-farm.com/bUXAV.s_dxGWld0BYlW/cQ/Le-mF9/uHZoUqlfkdPkTLcg1/OgThca3/NkDiEstmNJzkUJ5rNPz/cm0CNaQd";
+          s.async = true;
+          s.referrerPolicy = 'no-referrer-when-downgrade';
+          s.addEventListener('load', function(){ l.dataset.adStatus = 'loaded'; });
+          s.addEventListener('error', function(){ l.dataset.adStatus = 'error'; });
+          l.parentNode.insertBefore(s, l);
+        })({})
+        </script>
+      </div>
+      <!-- HILLTOPADS_BANNER_END -->
+    </div>
+  </aside>
+  <div id="site-page">
   <a class="skip-link" href="#calculator">Skip to calculator</a>
   <svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <defs>
@@ -147,9 +173,7 @@
           <div class="maker-note"><span class="note-icon"><svg class="icon"><use href="#i-spark"/></svg></span><p><strong>Your time is part of the print.</strong><br>Don't forget setup, removing supports and that last bit of sanding.</p></div>
         </aside>
       </div>
-      <!-- MONETAG_PLACEMENT_START: Enable this slot only after adding your ad code. -->
-      <div id="ad-slot-after-calculator" class="ad-slot" hidden aria-label="Advertisement"></div>
-      <!-- MONETAG_PLACEMENT_END -->
+
       <div class="workbench-footnote"><span><svg class="icon"><use href="#i-shield"/></svg>No accounts. No file uploads. Just your numbers.</span><span>Currency changes labels only. Estimates exclude taxes and shipping.</span></div>
     </section>
 
@@ -174,23 +198,33 @@
 
   <footer class="site-footer container"><div><a href="./index.html" class="brand footer-brand"><span class="brand-mark"><svg><use href="#i-layers"/></svg></span>layerwise<span class="brand-dot">.</span></a><p>A clearer picture. A better next print.</p></div><div class="footer-right"><div><a href="./privacy.html">Privacy</a><a href="./terms.html">Terms</a><a href="#calculator">Back to workbench ↑</a></div><span>Built for makers. Calculated with care. © <span id="year">2026</span> Layerwise.</span></div></footer>
 
+  </div>
   <dialog id="quote-dialog" aria-labelledby="quote-title"><div class="dialog-header"><div><span class="tiny-label">READY WHEN YOU ARE</span><h2 id="quote-title">Your print quote.</h2></div><button type="button" class="dialog-close" id="close-quote" aria-label="Close quote">×</button></div><div class="field"><label for="job">Project name <span class="label-note">optional</span></label><div class="input-wrap"><input type="text" id="job" maxlength="80" placeholder="e.g. Desk organizer — olive PLA" autocomplete="off"></div></div><div class="quote-preview" id="quote-preview"></div><p class="quote-disclaimer">Estimate only. Tax, shipping and a delivery schedule are not included. Review before sending to a customer.</p><div class="dialog-buttons"><button type="button" id="download-quote" class="primary-button"><svg class="icon"><use href="#i-download"/></svg>Download quote (.txt)</button><button type="button" id="print-quote" class="secondary-button"><svg class="icon"><use href="#i-printer"/></svg>Print / PDF</button></div></dialog>
   <dialog id="share-dialog" aria-labelledby="share-title"><div class="dialog-header"><div><span class="tiny-label">PASS IT ALONG</span><h2 id="share-title">Share this estimate.</h2></div><button type="button" class="dialog-close" id="close-share" aria-label="Close sharing">×</button></div><p class="dialog-description">The link includes your calculator settings. Anyone with it can view those numbers. Your project name isn't included.</p><label for="share-url" class="sr-only">Shareable estimate link</label><textarea id="share-url" rows="3" readonly></textarea><button type="button" id="copy-link" class="primary-button"><svg class="icon"><use href="#i-copy"/></svg>Copy link</button></dialog>
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
   <div id="print-area" hidden></div>
   <noscript><div class="noscript-banner">Please enable JavaScript to use the calculator. The formulas and explanations below work without it.</div></noscript>
+  <!-- HILLTOPADS_POPUP_START: User-approved direct link, triggered once by a feature-button click. -->
+  <script id="hilltopads-popup-loader" data-ad-status="ready">
+  (function(){
+    var anchor = document.currentScript,
+        attempted = false,
+        offerUrl = "https://bold-consequence.com/bv3.VC0RPG3gpkvnbAmXVyJWZ_DP0/3-N-TOki3/N/zgMZz/L/TMcS1fOfT/c/3fMozAcF";
+    document.addEventListener('click', function(event){
+      var button = event.target.closest && event.target.closest('#quote-button, #copy-button, #share-button');
+      if (attempted || !event.isTrusted || !button || button.disabled) return;
+      attempted = true;
+      anchor.dataset.adStatus = 'attempted';
+      // Bubble after the feature handler, still inside the real click gesture.
+      // The supplied URL is a landing page, not a JavaScript loader.
+      try {
+        window.open(offerUrl, '_blank', 'noopener,noreferrer');
+      } catch (error) {
+        anchor.dataset.adStatus = 'error';
+      }
+    });
+  })();
+  </script>
+  <!-- HILLTOPADS_POPUP_END -->
 </body>
-  <script>
-(function(hbxqpj){
-var d = document,
-    s = d.createElement('script'),
-    l = d.currentScript || d.scripts[d.scripts.length - 1];
-s.settings = hbxqpj || {};
-s.src = "\/\/expensive-pollution.com\/c.Dk9f6jbG2g5el_S\/WyQL9\/NezJUP5\/NazUcmzmMky\/0f3nNCTmku3LNtzJMk3t";
-s.async = true;
-s.referrerPolicy = 'no-referrer-when-downgrade';
-l.parentNode.insertBefore(s, l);
-})({})
-</script>
 </html>
-
