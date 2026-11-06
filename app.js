@@ -6,7 +6,7 @@ const { DEFAULTS, LIMITS, normalize, calculate } = globalThis.LayerwiseCalculato
 const $ = (id) => document.getElementById(id);
 const STORAGE_KEY = 'layerwise.estimate.v1';
 const costLabels = { material: 'Material', electricity: 'Electricity', machine: 'Machine time', labor: 'Hands-on labor', other: 'Other costs' };
-const costColors = { material: '#c3e68e', electricity: '#a2b58b', machine: '#6f8764', labor: '#dee7c7', other: '#44583e' };
+const costColors = { material: '#c0dfff', electricity: '#80b7e5', machine: '#4e89c1', labor: '#e1effc', other: '#345e8e' };
 const presets = {
   fdm: [{ id: 'pla', label: 'PLA', price: 22 }, { id: 'petg', label: 'PETG', price: 25 }, { id: 'abs', label: 'ABS', price: 24 }, { id: 'custom', label: 'Custom', price: null }],
   resin: [{ id: 'standard', label: 'Standard', price: 35 }, { id: 'tough', label: 'Tough', price: 50 }, { id: 'water', label: 'Water-washable', price: 40 }, { id: 'custom', label: 'Custom', price: null }]
@@ -138,12 +138,12 @@ function render() {
     legend.push(row);
   }
   $('cost-legend').replaceChildren(...legend);
-  $('cost-donut').style.background = result.totalCost > 0 ? `conic-gradient(${segments.join(',')})` : '#3c5034';
+  $('cost-donut').style.background = result.totalCost > 0 ? `conic-gradient(${segments.join(',')})` : '#264f7b';
   $('cost-donut').setAttribute('aria-label', Object.entries(result.costs).map(([key, value]) => `${costLabels[key]}: ${money(value)}`).join('; '));
   document.querySelectorAll('.currency-symbol').forEach((item) => { item.textContent = symbol(); });
   $('target-slider').value = Math.min(80, state.target);
   const percentage = Math.min(100, state.target / 80 * 100);
-  $('target-slider').style.background = `linear-gradient(to right,#bedf86 ${percentage}%,#40523a ${percentage}%)`;
+  $('target-slider').style.background = `linear-gradient(to right,#acd6fc ${percentage}%,#315d8c ${percentage}%)`;
   $('pricing-hint').textContent = state.pricing === 'margin'
     ? `Margin, not markup. Target: ${number(state.target)}% after fees.`
     : `Markup adds ${number(state.target)}% of cost, after fees.`;
