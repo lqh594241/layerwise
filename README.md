@@ -1,37 +1,21 @@
-# Layerwise · 3D 打印成本与报价工具
 
-面向英文用户的独立工具站。原生 HTML/CSS/JavaScript，无前端运行依赖、付费 API、账户系统或服务器端数据存储。已接入用户提供的 HilltopAds 横幅和点击弹窗代码；Ahrefs 保持空白，未使用外部字体。
-
-## 本地预览
-
-可以直接双击本目录的 `index.html`，无需安装依赖或启动服务。样式、计算器、报价下载和辅助页面均支持本地文件打开；分享链接在本地预览时只能在同样拥有这些文件的设备上打开，对外分享需要先上线。
-
-如果需要 HTTP 预览，安装 Node.js 后在本目录运行：
-
-```sh
+Layerwise · 3D Printing Cost & Quotation Tool
+An independent tool site for English-speaking users. Native HTML/CSS/JavaScript, with no frontend runtime dependencies, paid APIs, account system, or server-side data storage. Integrated user-provided HilltopAds banner and click pop-up code; Ahrefs remains blank, and external fonts are not used.
+Local Preview
+You can simply double-click the index.html file in this directory without installing dependencies or starting a service. Styles, calculators, quote downloads, and auxiliary pages all support local file opening. Shared links can only be opened on devices with the same files when previewed locally; external sharing requires online deployment first.
+If you need HTTP preview, run the following command in this directory after installing Node.js:
 npm run dev
-```
-
-打开 http://127.0.0.1:4173 。服务只监听本机。在线演示：https://layerwise.luqihang594241.workers.dev/
-
-```sh
+Open http://127.0.0.1:4173. The service only listens on the local machine. Online demo: https://layerwise.luqihang594241.workers.dev/
 npm test
 npm run build
-```
-
-不需要 `npm install`。`npm test` 验证成本、失败率、利润率、加价率、平台费用、批量金额和边界条件。`npm run build` 把上线文件复制到 `dist/`，不包含开发服务器、测试和文档。
-
-## 首版功能
-
-- FDM：克数、每公斤价格；树脂：毫升数、每升价格。
-- 耗材示例预设、时间、电力、机器折旧/维护、人工、其他费用、失败率。
-- 两种报价方法：目标销售利润率、成本加价率；可计入比例和固定平台费用。
-- 批量报价、客户报价 TXT 下载、打印或浏览器另存为 PDF。
-- 客户报价不包含内部成本和利润；“Copy breakdown”专门复制内部明细。
-- 本地自动保存；分享链接使用 URL fragment，排除项目名称。
-- USD/EUR/GBP/CAD/AUD 币种标签，不进行汇率转换。
-- 响应式布局、键盘交互、FAQ、计算说明、隐私、条款、404 和 WebApplication 结构化数据。
-
-所有默认成本和耗材价格都只是示例，不是实时市场价格。所有输入按单个合格成品分配；同板多件需要先自行分摊材料、打印时间和人工。失败率只放大材料、耗电和机器成本，人工与其他费用计一次。报价按分向上取整，再乘件数，保证单位价格和批量金额一致。
-
-
+No need for npm install.  npm test verifies cost, failure rate, profit margin, markup rate, platform fees, batch amounts, and boundary conditions.  npm run build copies the production files to dist/, excluding the development server, tests, and documentation.
+First Edition Features
+FDM: grams, price per kilogram; Resin: milliliters, price per liter.
+Consumable Examples: Preset, Time, Power, Machine Depreciation/Maintenance, Labor, Other Costs, Failure Rate.
+Two quotation methods: target sales profit margin, cost markup rate; deductible ratio and fixed platform fee.
+Batch Quoting, Customer Quotation TXT Download, Print or Save as PDF in Browser.
+The customer quotation does not include internal costs and profits; "Copy breakdown" specifically replicates internal details.
+Locally auto-save; share links using URL fragments, excluding project names.
+USD/EUR/GBP/CAD/AUD currency labels, no exchange rate conversion.
+Responsive layout, keyboard interaction, FAQ, calculation instructions, privacy, terms, 404, and WebApplication structured data.
+All default costs and material prices are merely examples and not real-time market prices. All inputs are allocated per qualified finished product; for multiple items on the same board, material, printing time, and labor costs must be allocated first. The failure rate only amplifies material, power consumption, and machine costs, while labor and other expenses are calculated once. The quote is rounded up to the nearest fraction, then multiplied by the quantity to ensure consistent unit price and bulk amount.
