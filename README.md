@@ -95,3 +95,13 @@ npm run build
 ## 搜索引擎站点地图检查
 
 更新 GitHub 并等待 Cloudflare 部署成功后，打开 https://layerwise.luqihang594241.workers.dev/sitemap.xml ，应显示 XML 网址列表，不能是首页或 404。然后在对应 Google Search Console 网站属性的 Sitemaps 中提交 `sitemap.xml`，检查状态是否为 Success；也可向 Bing Webmaster Tools 提交同一地址。提交成功提示仅代表接受请求，成功读取也不保证收录、排名或流量。
+
+## Cloudflare Workers 发布目录
+
+本项目的 `wrangler.jsonc` 已指定 `assets.directory` 为 `./dist`，Worker 名称与本站目录名一致。上传 GitHub 时，把此配置文件与 `package.json` 放在同一级，并保留 `scripts/build.mjs` 的子目录结构。
+
+- 构建命令：`npm run build`
+- 部署命令：`npx wrangler deploy`
+- 构建根目录：独立仓库为 `/`；共用仓库时为本站子目录。
+
+提交后确认 Cloudflare 构建使用最新 GitHub 提交。旧日志若显示 `Set SITE_URL`，表示尚未使用本次修复后的构建脚本；最新构建会显示已生成 sitemap 和 canonical。发布目录应为 `dist`，不要再让自动检测选择仓库根目录 `.`。完成部署后检查正式网站 `/sitemap.xml`，再到 Search Console 重新提交。
